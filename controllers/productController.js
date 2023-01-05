@@ -22,6 +22,22 @@ getAllProducts = async (req, res) => {
     })
 }
 
+// single product
+
+getProductDetails = async (req, res, next) => {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+        return res.status(500).json({
+            success: false,
+            message: 'Product not found'
+        });
+    }
+    res.status(200).json({
+        success: true,
+        product
+    })
+}
+
 // update products --> admin route
 
 updateProduct = async (req, res, next) => {
@@ -53,7 +69,7 @@ deleteProduct = async (req, res, next) => {
     }
 
     await product.remove();
-    res.status(200).json({success:true, message:'product deleted successfuly'})
+    res.status(200).json({ success: true, message: 'product deleted successfuly' })
 }
 
-module.exports = { getAllProducts, createProduct, updateProduct, deleteProduct };
+module.exports = { getAllProducts, createProduct, updateProduct, deleteProduct, getProductDetails };
