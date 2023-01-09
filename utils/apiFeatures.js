@@ -13,6 +13,23 @@ class ApiFeatures {
         this.query = this.query.find({ ...keyword });
         return this;
     }
+
+    filter() {
+        const queryCopy = { ...this.queryStr };
+        const removeFields = ['keyword', 'page', 'limit'];
+        console.log(queryCopy)
+        removeFields.forEach((key) => delete queryCopy[key])
+        // console.log(queryCopy)
+        this.query = this.query.find(queryCopy);
+
+        // filter for price and rating
+
+        let queryStr = JSON.stringify(queryCopy);
+        queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
+        this.query = this.query.find(JSON.parse(queryStr));
+
+        return this;
+    }
 }
 
 module.exports = ApiFeatures;
